@@ -6,51 +6,51 @@ import Resume from '../models/Resume.js'
 //controller for user registration
 //POST: /api/users/register
 
-const generateToken=(userId)=>{
-    const token=jwt.sign({userId},process.env.JWT_SECRET,{expiresIn:'7d'})
+const generateToken = (userId) => {
+    const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' })
     return token
 }
 
-export const registerUser= async(req,res)=>{
-    try{
-        const {name,email,password}=req.body;
+export const registerUser = async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
 
         //check if required fields are present
-        if(!name || !email || !password){
+        if (!name || !email || !password) {
             return res.status(400).json({
-                massage:'Missing required fields'
+                massage: 'Missing required fields'
             })
         }
         //check if user alread exists
-        const user=await User.findOne({email});
-        if(user){
+        const user = await User.findOne({ email });
+        if (user) {
             return res.status(400).json({
-                massage:'User already exists'
+                massage: 'User already exists'
             })
-        
+
         }
 
         //create new user
-        const hashedPassword=await bcrypt.hash(password,10)
-        const newUser=await User.create({
-            name,email,password:hashedPassword
+        const hashedPassword = await bcrypt.hash(password, 10)
+        const newUser = await User.create({
+            name, email, password: hashedPassword
         })
 
         //return success msg
-        const token=generateToken(newUser._id)
-        newUser.password=undefined;
+        const token = generateToken(newUser._id)
+        newUser.password = undefined;
 
         return res.status(201).json({
-            message:'User created successfully',
+            message: 'User created successfully',
             token,
-            user:newUser
+            user: newUser
 
         })
 
 
-        }catch(error){
+    } catch (error) {
         return res.status(400).json({
-            message:error.message
+            message: error.message
         })
     }
 }
@@ -58,39 +58,38 @@ export const registerUser= async(req,res)=>{
 //controller for user login
 //POST: /api/users/login
 
-export const loginUser= async(req,res)=>{
-    try{
-        const {email,password}=req.body;
+export const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
         //check if user alread exists
-        const user=await User.findOne({email});
-        if(!user){
+        const user = await User.findOne({ email });
+        if (!user) {
             return res.status(400).json({
-                massage:'Invalid email or password'
+                massage: 'Invalid email or password'
             })
-        
+
         }
         //check if password is correct
-        if(!user.comparePassword(password)){
+        if (!user.comparePassword(password)) {
             return res.status(400).json({
-                massage:'Invalid email or password'
+                massage: 'Invalid email or password'
             })
-        
         }
 
         //return success msg
-        const token=generateToken(user._id)
-        user.password=undefined;
+        const token = generateToken(user._id)
+        user.password = undefined;
 
         return res.status(200).json({
-            message:'Login successful',
+            message: 'Login successful',
             token,
             user
         })
 
-        }catch(error){
+    } catch (error) {
         return res.status(400).json({
-            message:error.message
+            message: error.message
         })
     }
 }
@@ -98,23 +97,23 @@ export const loginUser= async(req,res)=>{
 //controller for getting user by id
 //GET: /api/users/data
 
-export const getUserById= async(req,res)=>{
-    try{
-        const userId=req.userId;
-        const user=await User.findById(userId);
-        if(!user){
+export const getUserById = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const user = await User.findById(userId);
+        if (!user) {
             return res.status(404).json({
-                massage:'User not found'
+                massage: 'User not found'
             })
-        
+
         }
         //return user
-        user.password=undefined;
-        return res.status(200).json({user})
-        
-        }catch(error){
+        user.password = undefined;
+        return res.status(200).json({ user })
+
+    } catch (error) {
         return res.status(400).json({
-            message:error.message
+            message: error.message
         })
     }
 }
@@ -122,17 +121,17 @@ export const getUserById= async(req,res)=>{
 //controller for getting user resumes
 //GET: /api/users/resumes
 
-export const getUserResumes=async(req,res)=>{
-    try{
-        const userId=req.userId;
+export const getUserResumes = async (req, res) => {
+    try {
+        const userId = req.userId;
 
         //return user resumes
-        const resumes=await  Resume.find({userId})
-        return res.status(200).json({resumes})
+        const resumes = await Resume.find({ userId })
+        return res.status(200).json({ resumes })
     }
-    catch(error){
+    catch (error) {
         return res.status(400).json({
-            message:error.message
+            message: error.message
         })
     }
 }

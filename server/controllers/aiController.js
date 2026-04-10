@@ -83,19 +83,20 @@ Make it ATS-friendly and return only text.`
 //controller for uploading a resume to the database
 //POST: /api/ai/upload-resume
 
-export const uploadResume = async (req, res) => {  
-    try{
-        const {resumeText,title}=req.body;
-        const userId=req.userId;
-        
-        if(!resumeText){
+export const uploadResume = async (req, res) => {
+    try {
+        const { resumeText, title } = req.body;
+        const userId = req.userId;
+
+        if (!resumeText) {
+            console.log("error: ", resumeText, title, userId);
             return res.status(400).json({
-                message:'Missing required fields'
+                message: 'Missing required fields'
             });
         }
-        const systemPrompt="You are an expert AI agent to extract data from resume."
+        const systemPrompt = "You are an expert AI agent to extract data from resume."
 
-        const userPrompt=`extract data from this resume:${resumeText}
+        const userPrompt = `extract data from this resume:${resumeText}
         Provide data in the following JSON format with no additional text before or
         after:
         {
@@ -169,7 +170,7 @@ export const uploadResume = async (req, res) => {
     ],
         }
         `
-    const response = await ai.chat.completions.create({
+        const response = await ai.chat.completions.create({
             model: process.env.OPENAI_MODEL,
             messages: [
                 {
@@ -182,17 +183,23 @@ export const uploadResume = async (req, res) => {
                 }
             ],
 
-            response_format:{type:'json_object'}
+            response_format: { type: 'json_object' }
         });
 
         const extractedData = response.choices[0].message.content;
-        const parsedData=JSON.parse(extractedData);
-        const newResume=await Resume.create({userId,title,...parsedData})
+        const parsedData = JSON.parse(extractedData);
+        const newResume = await Resume.create({ userId, title, ...parsedData })
 
-        res.json({resumeId:newResume._id})
-        return res.status(200).json({ enhancedContent });
+        return res.status(200).json({ resumeId: newResume._id })
 
     } catch (error) {
+        console.log('uploadResume error:', error.message);
+        const is429 = error?.status === 429 || error?.message?.includes('429');
+        if (is429) {
+            return res.status(429).json({
+                message: 'AI rate limit reached. Please wait a moment and try again.'
+            });
+        }
         return res.status(500).json({
             message: error.message
         });

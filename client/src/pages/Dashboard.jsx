@@ -3,9 +3,24 @@ import React, { useEffect, useState } from 'react'
 import { dummyResumeData } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import pdfToText from 'react-pdftotext'
 import { toast } from 'react-hot-toast';
 import api from './../configs/api';
+import * as pdfjsLib from 'pdfjs-dist';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+
+async function pdfToText(file) {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    let text = '';
+    for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        text += content.items.map(item => item.str).join(' ') + '\n';
+    }
+    return text;
+}
+
 
 const Dashboard = () => {
 
@@ -53,28 +68,29 @@ const Dashboard = () => {
         }
     }
 
-    const uploadResume = async () => {
+    const uploadResume = async (event) => {
         event.preventDefault();
+        if (!resume) {
+            toast.error('Please select a PDF file');
+            return;
+        }
         setIsLoading(true);
         try {
-            const resumeText = await pdfToText(resume)
+            const resumeText = await pdfToText(resume);
             const { data } = await api.post(`/api/ai/upload-resume`, { title, resumeText }, {
                 headers: {
                     Authorization: token
                 }
-            })
+            });
             setTitle('');
             setResume(null);
             setShowUploadResume(false);
-            navigate(`/app/builder/${data.resumeId}`)
-
+            navigate(`/app/builder/${data.resumeId}`);
         } catch (error) {
             toast.error(error?.response?.data?.message || error.message);
+        } finally {
+            setIsLoading(false);
         }
-
-        setIsLoading(false);
-
-
     }
 
     const editTitle = async (event) => {

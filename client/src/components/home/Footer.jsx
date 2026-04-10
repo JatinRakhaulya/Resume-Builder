@@ -1,12 +1,12 @@
 import React from 'react'
 
 const Footer = () => {
-  return (
-    <>
-     <footer className="flex flex-wrap justify-center lg:justify-between overflow-hidden gap-10 md:gap-20 py-16 px-6 md:px-16 lg:px-24 xl:px-32 text-[13px] text-gray-500 bg-gradient-to-r from-white via-green-200/60 to-white mt-40">
+    return (
+        <>
+            <footer className="flex flex-wrap justify-center lg:justify-between overflow-hidden gap-10 md:gap-20 py-16 px-6 md:px-16 lg:px-24 xl:px-32 text-[13px] text-gray-500 bg-gradient-to-r from-white via-green-200/60 to-white mt-40">
                 <div className="flex flex-wrap items-start gap-10 md:gap-[60px] xl:gap-[140px]">
                     <a href="#">
-                        <img src="/logo.svg" alt='logo' className='h-11 w-auto'/>
+                        <img src="/logo.svg" alt='logo' className='h-11 w-auto' />
                     </a>
                     <div>
                         <p className="text-slate-800 font-semibold">Product</p>
@@ -35,7 +35,7 @@ const Footer = () => {
                         </ul>
                     </div>
                 </div>
-               <div className="flex flex-col items-start lg:items-end text-left lg:text-right gap-2">
+                <div className="flex flex-col items-start lg:items-end text-left lg:text-right gap-2">
                     <p className="max-w-60">Making every customer feel valued—no matter the size of your audience.</p>
                     <div className="flex items-center gap-4 mt-3">
                         <a href="https://dribbble.com/prebuiltui" target="_blank" rel="noreferrer">
@@ -74,15 +74,15 @@ const Footer = () => {
 
 
 
-       <style>{`
+            <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
             
                 * {
                     font-family: 'Poppins', sans-serif;
                 }
             `}</style>
-    </>
-  )
+        </>
+    )
 }
 
 export default Footer

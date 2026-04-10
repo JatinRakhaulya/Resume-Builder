@@ -4,27 +4,27 @@ import ModernTemplate from './templates/ModernTemplate'
 import MinimalImageTemplate from './templates/MinimalImageTemplate'
 import MinimalTemplate from './templates/MinimalTemplate'
 
-const ResumePreview = ({data,template,accentColor,classes=""}) => {
+const ResumePreview = ({ data, template, accentColor, classes = "" }) => {
 
-    const renderTemplate=()=>{
-        switch(template){
+    const renderTemplate = () => {
+        switch (template) {
             case "modern":
-                return <ModernTemplate data={data} accentColor={accentColor}/>
+                return <ModernTemplate data={data} accentColor={accentColor} />
             case "minimal":
-                return <MinimalTemplate data={data} accentColor={accentColor}/>
+                return <MinimalTemplate data={data} accentColor={accentColor} />
             case "minimal-image":
-                return <MinimalImageTemplate data={data} accentColor={accentColor}/>
+                return <MinimalImageTemplate data={data} accentColor={accentColor} />
             default:
-                return <ClassicTemplate data={data} accentColor={accentColor}/>
+                return <ClassicTemplate data={data} accentColor={accentColor} />
         }
     }
-  return (
-    <div className='w-full bg-gray-100'>
-     <div id="resume-preview" className={"border border-gray-200 print:shadow-noneprint:border-none" + classes}>
-        {renderTemplate()}
-    </div> 
-    <style>
-        {`
+    return (
+        <div className='w-full bg-gray-100'>
+            <div id="resume-preview" className={"border border-gray-200 print:shadow-noneprint:border-none" + classes}>
+                {renderTemplate()}
+            </div>
+            <style>
+                {`
         @page {
         size:letter;
         margin:0;
@@ -54,9 +54,9 @@ const ResumePreview = ({data,template,accentColor,classes=""}) => {
         }
         
         `}
-    </style>
-    </div>
-  )
+            </style>
+        </div>
+    )
 }
 
 export default ResumePreview

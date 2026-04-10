@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const Hero = () => {
-    const {user}=useSelector(state=>state.auth);
-    const [menuOpen, setMenuOpen] = useState(false);
+  const { user } = useSelector(state => state.auth);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const logos = [
     "https://saasly.prebuiltui.com/assets/companies-logo/instagram.svg",
@@ -52,9 +52,9 @@ const Hero = () => {
             >
               Login
             </Link>
-            <Link  to='/app'  className='hidden md:block px-8 py-2 bg-green-500 hover:bg-green-700 active:scale-95 transition-all rounded-full text-white'
-            hidden={!user}>
-               Dashboard
+            <Link to='/app' className='hidden md:block px-8 py-2 bg-green-500 hover:bg-green-700 active:scale-95 transition-all rounded-full text-white'
+              hidden={!user}>
+              Dashboard
             </Link>
             <Link
               to="/app"
@@ -85,9 +85,8 @@ const Hero = () => {
 
         {/* Mobile Menu */}
         <div
-          className={`fixed inset-0 z-100 bg-black/40 text-black backdrop-blur flex flex-col items-center justify-center text-lg gap-8 md:hidden transition-transform duration-300 ${
-            menuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+          className={`fixed inset-0 z-100 bg-black/40 text-black backdrop-blur flex flex-col items-center justify-center text-lg gap-8 md:hidden transition-transform duration-300 ${menuOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
         >
           <a href="#" className="text-white">
             Home

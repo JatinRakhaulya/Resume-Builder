@@ -19,7 +19,7 @@ const ColorPicker = ({ selectedColor, onChange }) => {
 
   return (
     <div className='relative'>
-      
+
       {/* Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -66,7 +66,7 @@ const ColorPicker = ({ selectedColor, onChange }) => {
 
         </div>
       )}
-      
+
     </div>
   );
 };
